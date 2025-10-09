@@ -23,7 +23,9 @@ public class StageController {
 
     public StageController(StageService service) {
         this.service = service;
-    }   // ------------------- Packages -------------------
+    }
+
+    // ------------------- Packages -------------------
     @PostMapping("/packages")
     public ResponseEntity<?> addPackage(@RequestBody DecorationPackage pkg) {
         try {
@@ -45,7 +47,7 @@ public class StageController {
                     .body("Failed to fetch packages: " + e.getMessage());
         }
     }
- 
+
     // ------------------- Customers -------------------
     @GetMapping("/customers")
     public ResponseEntity<?> getCustomers(@RequestParam Long organizerId) {
