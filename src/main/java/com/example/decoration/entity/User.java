@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +25,8 @@ public class User {
 
     private String phoneNumber;
 
-    @ManyToMany(mappedBy = "organizers")
-    @JsonIgnoreProperties("organizers") // Ignore "organizers" inside each DecorationPackage
+    @ManyToMany(mappedBy = "organizers", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("organizers") // ignore 'organizers' inside DecorationPackage
     private Set<DecorationPackage> packages = new HashSet<>();
 
     public User() {}
