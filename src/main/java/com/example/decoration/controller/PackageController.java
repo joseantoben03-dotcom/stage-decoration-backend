@@ -44,7 +44,10 @@ public class PackageController {
 
     // Fetch packages for a specific organizer
     @GetMapping
-    public List<DecorationPackage> getPackages(@RequestParam Long organizerId) {
+    public List<DecorationPackage> getPackages(@RequestParam(required = false) Long organizerId) {
+        if (organizerId == null) {
+            throw new RuntimeException("organizerId parameter is required");
+        }
         return packageRepo.findByOrganizerId(organizerId);
     }
 
@@ -82,10 +85,10 @@ public class PackageController {
     // Add a package (organizer creates and is automatically added as an organizer)
     @PostMapping
     public DecorationPackage addPackage(
-            @RequestParam("name") String name,
-            @RequestParam("price") Double price,
-            @RequestParam("description") String description,
-            @RequestParam("userId") Long userId,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "price", required = false) Double price,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "image", required = false) MultipartFile imageFile
     ) throws IOException {
 
@@ -94,6 +97,20 @@ public class PackageController {
         System.out.println("Name: " + name);
         System.out.println("Price: " + price);
         System.out.println("Description: " + description);
+
+        // Validate required parameters
+        if (name == null || name.trim().isEmpty()) {
+            throw new RuntimeException("Package name is required");
+        }
+        if (price == null) {
+            throw new RuntimeException("Package price is required");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            throw new RuntimeException("Package description is required");
+        }
+        if (userId == null) {
+            throw new RuntimeException("User ID is required");
+        }
 
         // Find and validate user
         User organizer = userRepo.findById(userId)
